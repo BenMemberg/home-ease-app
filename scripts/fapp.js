@@ -135,14 +135,15 @@
   function parseTime(timeStr){
 	  var hour = timeStr.substring(0,2);
 	  var minute = timeStr.substring(3,5);
-	  var time;
+    var time;
+    hour = parseInt(hour) + 3;
 	  if(hour==12){
 		  time = hour + ':' + minute + 'pm';
 	  }else if(hour==24){
 		  time = '12:' + minute + 'am';
 	  }else if(hour>12){
 		  hour-=12;
-		  time = '0' + hour + ':' + minute + 'pm';
+		  time = hour<10 ?'0' + hour + ':' + minute + 'pm' : hour + ':' + minute + 'pm';
 	  }else{
 		  time = hour + ':' + minute + 'am';
 	  }
@@ -225,7 +226,7 @@
     keys.forEach(function(key) {
       app.getUser(key);
     });*/
-	app.loadAll();
+	  app.loadAll();
   };
 
   // TODO add saveusers function here
@@ -246,8 +247,8 @@
 			for(var i=0;i<responseJSON.length;i++){
 				app.updateUser(responseJSON[i]);
 			}
+			setTimeout(app.spinner.setAttribute('hidden', true),1000);
 			
-			app.spinner.setAttribute('hidden', true);
 		},
 		error: function(xhr){
             console.log("An error occured: " + xhr.status + " " + xhr.statusText);
